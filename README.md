@@ -1,5 +1,9 @@
 # simulino
 
+[![Docker Automated build](https://img.shields.io/docker/automated/irgendwr/simuino.svg)](https://hub.docker.com/r/irgendwr/simuino)
+[![Docker Build Status](https://img.shields.io/docker/build/irgendwr/simuino.svg)](https://hub.docker.com/r/irgendwr/simuino/builds)
+[![Docker Pulls](https://img.shields.io/docker/pulls/irgendwr/simuino.svg)](https://hub.docker.com/r/irgendwr/simuino)
+
 > Simuino is an Arduino UNO/MEGA Pin Simulator.
 
 This is a fork of [bsaxen/simuino](https://github.com/bsaxen/simuino) and [bsaxen/servuino](https://github.com/bsaxen/servuino) with some minor imprevements and fixes (e.g. locale/charset issues, missing return values, ...).
