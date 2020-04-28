@@ -96,9 +96,9 @@ void show(WINDOW *win)
     {
       wmove(win,0,2);
       if(confBoardType ==UNO)
-	wprintw(win,"SIMUINO - Arduino UNO Pin Analyzer 0.2.3 ");
+	wprintw(win, " SIMUINO - Arduino UNO Pin Analyzer 0.2.4 ");
       if(confBoardType ==MEGA)
-	wprintw(win,"SIMUINO - Arduino MEGA Pin Analyzer 0.2.3 ");
+	wprintw(win, " SIMUINO - Arduino MEGA Pin Analyzer 0.2.4 ");
       wmove(win,1,2);
                                                wprintw(uno,"Sketch: %s",g_currentSketch);
       wmove(win,2,2);
@@ -111,23 +111,23 @@ void show(WINDOW *win)
   if(win == ser)
     {
       wmove(win,0,2);
-      wprintw(win,"Serial Interface");
+      wprintw(win, " Serial Interface ");
     }
   if(win == slog)
     {
       next =  loopPos[currentLoop+1];
       if(currentStep == loopPos[currentLoop+1]) next = loopPos[currentLoop+2];
       wmove(win,0,2);
-      wprintw(win,"Log ");
+      wprintw(win," Log ");
       if(currentStep == g_steps)
-    	wprintw(slog,"%d,%d ->| (%d,%d)",currentLoop,currentStep,g_loops,g_steps);
+    	wprintw(slog, "%d, %d -> | (%d, %d) ",currentLoop,currentStep,g_loops,g_steps);
       else
-	    wprintw(slog,"%d,%d ->%d (%d,%d)",currentLoop,currentStep,next,g_loops,g_steps);
+	    wprintw(slog, "%d, %d -> %d (%d, %d) ",currentLoop,currentStep,next,g_loops,g_steps);
     }
   if(win == msg)
     {
       wmove(win,0,2);
-      wprintw(win,"----------Messages----------");
+      wprintw(win, " Messages ");
     }
   
   wmove(uno,board_h-2,4);
@@ -1971,6 +1971,3 @@ void readSetting()
 	}
     }
 }
-//====================================
-// End of file
-//====================================
