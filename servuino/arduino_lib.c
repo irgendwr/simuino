@@ -84,16 +84,19 @@ int shiftIn(int dataPin, int clockPin, int bitOrder)
 {
   //bitOrder: which order to shift out the bits; either MSBFIRST or LSBFIRST.
   servuinoFunc(S_UNIMPLEMENTED,0,0,"shiftIn()",0);
+  return 0;
 }
 
 unsigned long pulseIn(int pin, int value)
 {
   servuinoFunc(S_UNIMPLEMENTED,0,0,"pulseIn()",0);
+  return 0;
 }
 
 unsigned long pulseIn(int pin, int value, unsigned long timeout)
 {
   servuinoFunc(S_UNIMPLEMENTED,0,0,"pulseIn()",0);
+  return 0;
 }
 
 //------ Time ------------------------------
