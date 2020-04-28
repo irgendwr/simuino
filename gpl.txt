@@ -1,8 +1,9 @@
 
  SIMUINO - Arduino Simulator
- Copyright (C) 2014 Benny Saxen, License: GPL 3
-
- Visit https://github.com/irgendwr/simuino for more.
+ Copyright (C) 2014 Benny Saxen, License: GPLv3
 
  Place your sketch (.ino) in folder sketchbook.
  Type "help" for list of commands.
+
+ Visit: https://github.com/irgendwr/simuino
+ for more information.
