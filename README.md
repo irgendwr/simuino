@@ -10,7 +10,7 @@ Note: Simuino currently only works on Linux (i.e. Debian or Ubuntu).
 
 ## Requirements
 
-- g++ (`apt-get install g++`)
+- g++ (`apt-get install build-essential`)
 - git (`apt-get install git`)
 - ncurses-dev or ncurses (`apt-get install ncurses-dev`)
 
@@ -63,6 +63,17 @@ Run the file with `./simuino` (assuming you are in the folder in which you downl
 > Note: Sketches should be placed in folder `<your path>/simuino/` sketchbook. Sketches should be added with comments according to Simuino configuration, in order to control simulation length, scenario and name of sketch. The extension of the sketch file is `.ino`.
 
 Quote from the [simuino guide](http://web.simuino.com/get-started).
+
+## Docker
+
+The docker image can be run as shown here:
+
+```bash
+docker pull irgendwr/simuino
+docker run -it --rm -v /sketchbook:/simuino/sketchbook --name simuino irgendwr/simuino
+```
+
+Note: This will mount the sketchbook folder on your local system at `/sketchbook/`.
 
 ## Links
 
