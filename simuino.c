@@ -866,6 +866,8 @@ putMsg(2,syscom);
 int main(int argc, char *argv[])
 //====================================
 {
+  setlocale(LC_ALL, "en_US.UTF-8");
+
   char syscom[120];
   int ch,i,x;
 
