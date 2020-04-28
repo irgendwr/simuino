@@ -180,7 +180,6 @@ int   confBoardType = UNO;
 char  fileTemp[80]         = "temp.txt";
 char  fileInfoRun[80]      = "help.txt";
 char  fileCopyError[80]    = "copy.error";
-char  fileHints[80]        = "hints.txt";
 char  fileInfoAdmin[80]    = "help_command.txt";
 char  fileInfoGpl[80]      = "gpl.txt";
 char  fileProjList[80]     = "conf_list.txt";
