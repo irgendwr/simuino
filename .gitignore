@@ -1,0 +1,10 @@
+# binary files
+simuino
+*.o
+
+# generated files
+temp.txt
+settings.txt
+conf_list.txt
+error.txt
+copy.error
