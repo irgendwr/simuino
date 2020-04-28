@@ -3,11 +3,11 @@ void interruptNow();
 void writeStatus();
 void stopEncoding();
 void updateFromRegister();
-void digitalWrite(int pin,int value);
+void digitalWrite(int pin, int value);
 int  digitalRead(int pin);
 
-char  interruptType[50][80];
-void  (*interrupt[9])();
+char interruptType[50][80];
+void (*interrupt[9])();
 
 #define S_UNIMPLEMENTED            0
 #define S_SETUP                    1
@@ -49,21 +49,13 @@ void  (*interrupt[9])();
 #define S_SERIAL_PRINT_UCHAR      34
 #define S_SERIAL_PRINTLN_UCHAR    35
 
-
-
-
 #define R_PORT 1
 #define R_DDR  2
 #define R_PIN  3
 
-void  bitWrite(unsigned int *x, int n,int b);
-int   bitRead(int x, int n);
-int   readRegister(int reg, int port);
-void  writeRegister(int digital, int reg, int port, int value);
-void  registerLog();
-void  setPINRegister(int step); 
-
-
-
-
-
+void bitWrite(unsigned int *x, int n, int b);
+int  bitRead(int x, int n);
+int  readRegister(int reg, int port);
+void writeRegister(int digital, int reg, int port, int value);
+void registerLog();
+void setPINRegister(int step); 

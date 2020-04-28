@@ -1,19 +1,3 @@
-/*  Simuino is a Arduino Simulator based on Servuino Engine
-    Copyright (C) 2011  Benny Saxen
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
 void anyErrors();
 int  countRowsInFile(char *fileName);
 int  analyzeEvent(char *Event);
@@ -52,10 +36,10 @@ void showScenario(char *fileName);
 void readMsg(char *fileName);
 void init();
 int  loadSketch(char sketch[]);
-void pinMode(int pin,int mode);
-void digitalWrite(int pin,int value);
+void pinMode(int pin, int mode);
+void digitalWrite(int pin, int value);
 void analogReference(char type[]);
-void analogWrite(int pin,int value); 
+void analogWrite(int pin, int value); 
 void tone(int pin, unsigned int freq);
 void tone(int pin, unsigned int freq, unsigned long duration);
 void noTone(int pin);
@@ -65,7 +49,7 @@ void delayMicroseconds(int us);
 void test_math();
 void test_trigonometry();
 void randomSeed(int seed);
-void attachInterrupt(int interrupt,void(*func)(),int mode);
+void attachInterrupt(int interrupt, void(*func)(), int mode);
 void detachInterrupt(int interrupt);
 void interrupts();
 void noInterrupts();
