@@ -1,2 +1,0 @@
-# Simuino Setting Thu May 29 17:47:46 2014
-SKETCH: sketchbook/helloWorld_UNO.ino

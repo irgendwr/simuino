@@ -1,5 +1,6 @@
 # binary files
 simuino
+servuino/servuino
 *.o
 
 # generated files
@@ -8,4 +9,21 @@ settings.txt
 conf_list.txt
 error.txt
 copy.error
+
 servuino/serv.error
+servuino/g++.result
+servuino/sketch.ino
+servuino/data.register
+servuino/data.scen
+servuino/data.scenario
+servuino/ino.debug
+servuino/serv.anaval
+servuino/serv.cust
+servuino/serv.digval
+servuino/serv.event
+servuino/serv.pinmod
+servuino/serv.pinrw
+servuino/serv.serial
+servuino/serv.time
+
+.vscode
