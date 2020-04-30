@@ -1,7 +1,5 @@
 # simulino
 
-[![Docker Automated build](https://img.shields.io/docker/automated/irgendwr/simuino.svg)](https://hub.docker.com/r/irgendwr/simuino)
-[![Docker Build Status](https://img.shields.io/docker/build/irgendwr/simuino.svg)](https://hub.docker.com/r/irgendwr/simuino/builds)
 [![Docker Pulls](https://img.shields.io/docker/pulls/irgendwr/simuino.svg)](https://hub.docker.com/r/irgendwr/simuino)
 
 > Simuino is an Arduino UNO/MEGA Pin Simulator.
@@ -10,7 +8,7 @@ This is a fork of [bsaxen/simuino](https://github.com/bsaxen/simuino) and [bsaxe
 
 Thanks to [@DoodleSchrank](https://github.com/DoodleSchrank) for helping me fix the locale/charset issue ❤
 
-Note: Simuino currently only works on Linux (i.e. Debian or Ubuntu).
+Note: Simuino currently only works on Linux (i.e. Debian or Ubuntu) or using the [Docker Image](https://hub.docker.com/r/irgendwr/simuino).
 
 ## Requirements
 
@@ -84,17 +82,17 @@ Note: This will mount the sketchbook folder on your local system at `/sketchbook
 From the original repository:
 
 > Copyright (C) 2012 Benny Saxen
-> 
+>
 > This program is free software: you can redistribute it and/or modify
 > it under the terms of the GNU General Public License as published by
 > the Free Software Foundation, either version 3 of the License, or
 > (at your option) any later version.
-> 
+>
 > This program is distributed in the hope that it will be useful,
 > but WITHOUT ANY WARRANTY; without even the implied warranty of
 > MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 > GNU General Public License for more details.
-> 
+>
 > You should have received a copy of the GNU General Public License
 > along with this program. If not, see http://www.gnu.org/licenses/
 
