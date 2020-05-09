@@ -10,15 +10,15 @@ Thanks to [@DoodleSchrank](https://github.com/DoodleSchrank) for helping me fix 
 
 Note: Simuino currently only works on Linux (i.e. Debian or Ubuntu) or using the [Docker Image](https://hub.docker.com/r/irgendwr/simuino).
 
-## Requirements
+## Installation
+
+### Linux
+
+First, install the following requirements:
 
 - g++ (`apt-get install build-essential`)
 - git (`apt-get install git`)
 - ncurses-dev or ncurses (`apt-get install ncurses-dev`)
-
-## Installation
-
-Install the requirements listed above.
 
 Then, open a terminal and navigate (using `cd`) to a folder of your choice.
 
@@ -29,6 +29,21 @@ And enter the folder: `cd simuino`
 Now compile the program: `g++ -o simuino simuino.c -lncurses`
 
 And then run it: `./simuino`
+
+### Windows
+
+Windows is currently not supported. Either use a Linux VM, [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or [docker](https://www.docker.com/).
+
+### Docker
+
+The docker image can be run as shown here:
+
+```bash
+docker pull irgendwr/simuino
+docker run -it --rm -v /sketchbook:/simuino/sketchbook --name simuino irgendwr/simuino
+```
+
+More details are available on the [simuino docker hub page](https://hub.docker.com/r/irgendwr/simuino).
 
 ## Usage
 
@@ -66,16 +81,17 @@ Run the file with `./simuino` (assuming you are in the folder in which you downl
 
 Quote from the [simuino guide](http://web.simuino.com/get-started).
 
-## Docker
-
-The docker image can be run as shown here:
-
-```bash
-docker pull irgendwr/simuino
-docker run -it --rm -v /sketchbook:/simuino/sketchbook --name simuino irgendwr/simuino
-```
-
 Note: This will mount the sketchbook folder on your local system at `/sketchbook/`.
+
+## Links
+
+- [Supported Functions](reference.md)
+
+Useful links to the original documentation:
+
+- Get Started: http://web.simuino.com/get-started
+- FAQ: http://web.simuino.com/faq
+- Commands: http://web.simuino.com/commands
 
 ## License
 
@@ -97,12 +113,3 @@ From the original repository:
 > along with this program. If not, see http://www.gnu.org/licenses/
 
 > You are welcome to redistribute it, as long as it is named Simuino.
-
-## Links
-
-Useful links to the original documentation:
-
-- Get Started: http://web.simuino.com/get-started
-- FAQ: http://web.simuino.com/faq
-- Commands: http://web.simuino.com/commands
-- Supported Functions: http://web.simuino.com/reference
