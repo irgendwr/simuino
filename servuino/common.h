@@ -3,6 +3,8 @@
 
 #define UNO  1
 #define MEGA 2
+//#define DUE  3
+//#define B_32u4 4 // 32u4 based (e.g Leonardo, Micro)
 
 #define ANA 1
 #define DIG 2

@@ -307,15 +307,9 @@ void detachInterruptX(int x, int ir)
 
 int digitalPinToInterrupt(int pin)
 {
-	if (g_boardType == UNO)
-	{
-		switch (pin)
-		{
-			case 2: return 0;
-			case 3: return 1;
-		}
-	}
-	else if (g_boardType == MEGA)
+	// see https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
+	
+	if (g_boardType == MEGA) // Mega2560
 	{
 		switch (pin)
 		{
@@ -327,6 +321,34 @@ int digitalPinToInterrupt(int pin)
 			case 18: return 5;
 		}
 	}
+	/*
+	else if (g_boardType == B_32u4) // 32u4 based (e.g Leonardo, Micro)
+	{
+		switch (pin)
+		{
+			case 3: return 0;
+			case 2: return 1;
+			case 0: return 2;
+			case 1: return 3;
+			case 7: return 4;
+		}
+	}
+	else if (g_boardType == DUE) // Uno WiFiRev.2, Due, Zero, MKR Family and 101
+	{
+		// interrupt number = pin number
+		return pin;
+	}
+	*/
+	else // UNO, Ethernet (default)
+	{
+		switch (pin)
+		{
+			case 2: return 0;
+			case 3: return 1;
+		}
+	}
+	
+	// Invalid pin
 	return -1;
 }
 
