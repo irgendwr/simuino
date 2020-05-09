@@ -85,13 +85,13 @@ Note: This will mount the sketchbook folder on your local system at `/sketchbook
 
 ## Links
 
-- [Supported Functions](reference.md)
+- [Commands](docs/commands.md)
+- [Supported Functions](docs/reference.md)
 
 Useful links to the original documentation:
 
 - Get Started: http://web.simuino.com/get-started
 - FAQ: http://web.simuino.com/faq
-- Commands: http://web.simuino.com/commands
 
 ## License
 
