@@ -330,7 +330,7 @@ void loadCurrentSketch()
 		g_currentSketchStatus = SO_COMP_ERROR;
 }
 
-void openCommand()
+void cmdLoop()
 {
 	struct stat st;
 	int ch, nsteps = 1000, x, i, n, stop = 0, loop, projNo = 0, ok = 0, tmp;
@@ -342,7 +342,7 @@ void openCommand()
 
 	readMsg(gplFile);
 
-	while (strstr(str, "ex") == NULL)
+	while (true)
 	{
 		anyErrors();
 		unoInfo();
@@ -370,7 +370,11 @@ void openCommand()
 
 		// FIXME: this is a mess
 
-		if (strstr(sstr, "gpl"))
+		if (strstr(sstr, "exit") || strstr(sstr, "quit"))
+		{
+			break;
+		}
+		else if (strstr(sstr, "gpl"))
 		{
 			readMsg(gplFile);
 		}
@@ -561,7 +565,6 @@ void openCommand()
 			}
 			//readMsg(currentConf);
 		}
-
 		else if (strstr(sstr, "sav")) //save config
 		{
 		}
@@ -921,7 +924,7 @@ int main(int argc, char *argv[])
 
 	readMsg(gplFile);
 
-	openCommand();
+	cmdLoop();
 
 	delwin(uno);
 	delwin(ser);
