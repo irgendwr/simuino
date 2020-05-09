@@ -305,6 +305,31 @@ void detachInterruptX(int x, int ir)
 	detachInterrupt(ir);
 }
 
+int digitalPinToInterrupt(int pin)
+{
+	if (g_boardType == UNO)
+	{
+		switch (pin)
+		{
+			case 2: return 0;
+			case 3: return 1;
+		}
+	}
+	else if (g_boardType == MEGA)
+	{
+		switch (pin)
+		{
+			case 2: return 0;
+			case 3: return 1;
+			case 21: return 2;
+			case 20: return 3;
+			case 19: return 4;
+			case 18: return 5;
+		}
+	}
+	return -1;
+}
+
 
 //------ Interrupts ------------------------
 
