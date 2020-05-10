@@ -1,4 +1,4 @@
-# simulino
+# simuino
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/irgendwr/simuino.svg)](https://hub.docker.com/r/irgendwr/simuino)
 
@@ -6,7 +6,7 @@
 
 This is a fork of [bsaxen/simuino](https://github.com/bsaxen/simuino) and [bsaxen/servuino](https://github.com/bsaxen/servuino) with some minor imprevements and fixes (e.g. locale/charset issues, missing return values, ...).
 
-Thanks to [@DoodleSchrank](https://github.com/DoodleSchrank) for helping me fix the locale/charset issue ❤
+Thanks to [@DoodleSchrank](https://github.com/DoodleSchrank) for helping me fix the locale issue ❤
 
 Note: Simuino currently only works on Linux (i.e. Debian or Ubuntu) or using the [Docker Image](https://hub.docker.com/r/irgendwr/simuino).
 
@@ -26,7 +26,7 @@ Clone this repository: `git clone https://github.com/irgendwr/simuino.git`
 
 And enter the folder: `cd simuino`
 
-Now compile the program: `g++ -o simuino simuino.c -lncurses`
+Now compile the program: `g++ -O3 -lncurses -o simuino simuino.c`
 
 And then run it: `./simuino`
 

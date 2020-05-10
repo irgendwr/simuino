@@ -22,7 +22,7 @@
 | q   | Quits Run Mode. Switches back to Admin Mode. |
 | w   | Toggles window layout mode.                  |
 
-### Step/Goto
+### Step/Go-to
 
 | Key | Description                         |
 | --- | ----------------------------------- |

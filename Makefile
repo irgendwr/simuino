@@ -1,30 +1,37 @@
+RM = rm -f
+CC = g++
+CFLAGS = -Wpedantic -Wall -Wextra -O3
+INCLUDES =
+LFLAGS =
+LIBS = -lncurses -lm
+
 .PHONY: all
 all:
-	g++ -o simuino simuino.c -lncurses
+	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS) -o simuino simuino.c
 	touch temp.txt error.txt servuino/serv.error copy.error
 
 .PHONY: clean
 clean:
-	# -rm *.o
-	-rm simuino
-	-rm servuino/servuino
-	-rm temp.txt
-	-rm settings.txt
-	-rm conf_list.txt
-	-rm error.txt
-	-rm copy.error
-	-rm servuino/serv.error
-	-rm servuino/g++.result
-	-rm servuino/sketch.ino
-	-rm servuino/data.register
-	-rm servuino/data.scen
-	-rm servuino/data.scenario
-	-rm servuino/ino.debug
-	-rm servuino/serv.anaval
-	-rm servuino/serv.cust
-	-rm servuino/serv.digval
-	-rm servuino/serv.event
-	-rm servuino/serv.pinmod
-	-rm servuino/serv.pinrw
-	-rm servuino/serv.serial
-	-rm servuino/serv.time
+	# $(RM) *.o
+	$(RM) simuino
+	$(RM) servuino/servuino
+	$(RM) temp.txt
+	$(RM) settings.txt
+	$(RM) conf_list.txt
+	$(RM) error.txt
+	$(RM) copy.error
+	$(RM) servuino/serv.error
+	$(RM) servuino/g++.result
+	$(RM) servuino/sketch.ino
+	$(RM) servuino/data.register
+	$(RM) servuino/data.scen
+	$(RM) servuino/data.scenario
+	$(RM) servuino/ino.debug
+	$(RM) servuino/serv.anaval
+	$(RM) servuino/serv.cust
+	$(RM) servuino/serv.digval
+	$(RM) servuino/serv.event
+	$(RM) servuino/serv.pinmod
+	$(RM) servuino/serv.pinrw
+	$(RM) servuino/serv.serial
+	$(RM) servuino/serv.time

@@ -222,7 +222,6 @@ int ap, dp;
 #define SR 20
 
 WINDOW *uno, *ser, *slog, *msg;
-static struct termios orig, nnew;
 
 char gplFile[80];
 
@@ -266,8 +265,6 @@ int runStep(int dir)
 
 int goStep(int step)
 {
-	char stemp[SIZE_ROW];
-
 	if (step > g_steps || step < 1)
 	{
 		step = checkRange(HEAL, "step", step);
@@ -301,7 +298,7 @@ int tokCommand(char res[40][40], char *inp)
 
 void loadCurrentSketch()
 {
-	char syscom[120], temp[200];
+	char syscom[120], temp[256];
 
 	g_warning = S_NO;
 	putMsg(1, "Loading sketch ...");
@@ -333,8 +330,8 @@ void loadCurrentSketch()
 void cmdLoop()
 {
 	struct stat st;
-	int ch, nsteps = 1000, x, i, n, stop = 0, loop, projNo = 0, ok = 0, tmp;
-	char *p, str[120], sstr[20], fileName[120], temp[120], syscom[120];
+	int n, stop = 0, loop = 0, projNo = 0, ok = 0;
+	char str[120], sstr[20], fileName[120], temp[120], syscom[120];
 	char command[40][40];
 
 	s_mode = S_ADMIN;
@@ -361,8 +358,6 @@ void cmdLoop()
 		n = tokCommand(command, str);
 
 		strcpy(sstr, command[0]);
-
-		p = str;
 
 		projNo = atoi(sstr);
 		//sprintf(temp,"ProjNo: %d",projNo);
@@ -425,7 +420,7 @@ void cmdLoop()
 					// FIXME: do not use system calls
 					sprintf(syscom, "cd servuino;./servuino %d %d %d %d %d %d %d;", confSteps, g_scenSource, g_pinType, g_pinNo, 0, g_pinStep, S_DELETE);
 					//putMsg(2,syscom);
-					tmp = system(syscom);
+					system(syscom);
 					initSim();
 					readSketchInfo();
 					readSimulation();
@@ -464,7 +459,7 @@ void cmdLoop()
 					g_scenSource = 1;
 					// FIXME: do not use system calls
 					sprintf(syscom, "cd servuino;./servuino %d %d %d %d %d %d %d;", confSteps, g_scenSource, g_pinType, g_pinNo, g_pinValue, g_pinStep, S_ADD);
-					tmp = system(syscom);
+					system(syscom);
 					initSim();
 					readSketchInfo();
 					readSimulation();
@@ -505,7 +500,7 @@ void cmdLoop()
 		else if (strstr(sstr, "list"))
 		{
 			sprintf(syscom, "ls sketchbook/*.ino > %s;", fileProjList);
-			x = system(syscom);
+			system(syscom);
 			readMsg(fileProjList);
 		}
 		else if (strstr(sstr, "sketch"))
@@ -589,8 +584,7 @@ void cmdLoop()
 		else if (strstr(sstr, "clear"))
 		{
 			// FIXME: do not use system calls
-			sprintf(syscom, "rm servuino/sketch.ino;rm servuino/data.su;rm servuino/data.scen;");
-			x = system(syscom);
+			system("rm servuino/sketch.ino;rm servuino/data.su;rm servuino/data.scen;");
 		}
 		else if (strstr(sstr, "load"))
 		{
@@ -651,9 +645,8 @@ void cmdLoop()
 
 void runMode(int stop)
 {
-	int ch, x, step, tmp, res = 0, a = 0, b = 0, ir, ok = 0, n = 0;
-	char tempName[80], syscom[120], temp[80];
-	char command[40][40];
+	int step, res = 0, ok = 0;
+	char ch, tempName[80], syscom[120], temp[80];
 
 	strcpy(tempName, "help.txt");
 
@@ -683,7 +676,6 @@ void runMode(int stop)
 		unoInfo();
 
 		ch = getchar();
-
 		switch (ch)
 		{
 		case 'q':
@@ -797,7 +789,7 @@ void runMode(int stop)
 		if(strstr(command[0],"q") == NULL && n == 3)
 			{
 				g_pinNo = atoi(command[1]);
-				x = atoi(command[2]);
+				int x = atoi(command[2]);
 				printf("%s %d %d",command[0],g_pinNo,x);
 				if(strstr(command[0],"a"))
 		{
@@ -840,7 +832,7 @@ putMsg(2,syscom);
 
 				if (strstr(temp, "q") == NULL)
 				{
-					x = atoi(temp);
+					int x = atoi(temp);
 					ok = S_OK;
 					if (res == ANA)
 						ok = ok + checkRange(S_OK, "anaval", x);
@@ -851,7 +843,7 @@ putMsg(2,syscom);
 						g_scenSource = 1;
 						// steps, source, pintype, pinno, pinvalue, pinstep
 						sprintf(syscom, "cd servuino;./servuino %d %d %d %d %d %d %d;", confSteps, g_scenSource, g_pinType, g_pinNo, x, currentStep, S_ADD);
-						tmp = system(syscom);
+						system(syscom);
 						initSim();
 						readSketchInfo();
 						readSimulation();
@@ -871,13 +863,13 @@ putMsg(2,syscom);
 		}
 	}
 }
-int main(int argc, char *argv[])
+
+int main(/* int argc, char *argv[] */)
 {
 	// This fixes the locale/charset/encoding issue:
 	setlocale(LC_ALL, "");
 
-	char syscom[120];
-	int ch, i, x;
+	char syscom[256];
 
 	memset(logBlankRow, ' ', sizeof logBlankRow);
 	logBlankRow[sizeof logBlankRow - 1] = '\0';
@@ -895,15 +887,15 @@ int main(int argc, char *argv[])
 
 	// FIXME: do not use system calls
 	sprintf(syscom, "ls sketchbook/*.ino > %s;", fileProjList);
-	x = system(syscom);
+	system(syscom);
 	sprintf(syscom, "rm %s;touch %s;", fileTemp, fileTemp);
-	x = system(syscom);
+	system(syscom);
 	sprintf(syscom, "rm %s;touch %s;", fileError, fileError);
-	x = system(syscom);
+	system(syscom);
 	sprintf(syscom, "rm %s;touch %s;", fileServError, fileServError);
-	x = system(syscom);
+	system(syscom);
 	sprintf(syscom, "rm %s;touch %s;", fileCopyError, fileCopyError);
-	x = system(syscom);
+	system(syscom);
 
 	err = fopen(fileError, "w"); // Issue 15
 

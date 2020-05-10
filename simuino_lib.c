@@ -17,25 +17,31 @@
 
 int milliSleep(unsigned long milisec)
 {
-	struct timespec req = {0};
-	time_t sec = (int)(milisec / 1000);
-	milisec = milisec - (sec * 1000);
-	req.tv_sec = sec;
-	req.tv_nsec = milisec * 1000000L;
-	while (nanosleep(&req, &req) == -1)
-		continue;
+	time_t seconds = (int)(milisec / 1000);
+	milisec = milisec - (seconds * 1000);
+
+	struct timespec req = {
+		/* tv_sec: */ seconds,
+		/* tv_nsec: */ (long)milisec * 1000000L,
+	};
+
+	while (nanosleep(&req, &req) == -1);
+	
 	return 1;
 }
 
 int microSleep(unsigned long microsec)
 {
-	struct timespec req = {0};
-	time_t sec = (int)(microsec / 1000000L);
-	microsec = microsec - (sec * 1000000L);
-	req.tv_sec = sec;
-	req.tv_nsec = microsec * 1000;
-	while (nanosleep(&req, &req) == -1)
-		continue;
+	time_t seconds = (int)(microsec / 1000000L);
+	microsec = microsec - (seconds * 1000000L);
+
+	struct timespec req = {
+		/* tv_sec: */ seconds,
+		/* tv_nsec: */ (long)microsec * 1000,
+	};
+
+	while (nanosleep(&req, &req) == -1);
+	
 	return 1;
 }
 
@@ -51,7 +57,7 @@ void microDelay(int us)
 
 int analyzeEvent(char *event)
 {
-	int step, pin, value;
+	int pin, value;
 	char str[80], str1[12], str2[12], *p;
 	if (strstr(event, "analogRead") || strstr(event, "digitalRead"))
 	{
@@ -225,23 +231,17 @@ static void showTruncatedLine(WINDOW *win, int max, const char *fmt, ...)
 static int bottom_up = 0;
 void winLog() // show log lines in selectable order
 {
-	int i, k;
-	int first, last, incr;
-	char out_line[120 + MAX_SERIAL_BUFFER];
-	char *p;
-
 	wmove(slog, bottom_up ? log_h - 2 : 1, 1);
 	showTruncatedLine(slog, log_w, "next>%s", simulation[currentStep + 1]);
-	for (i = 1; i < log_h - 2; i++)
+	for (int i = 1; i < log_h - 2; i++)
 	{
-		int pos;
-		pos = i + 1;
+		int pos = i + 1;
 		if (bottom_up)
 		{
 			pos = log_h - pos - 1;
 		}
 		wmove(slog, pos, 1);
-		k = currentStep - i + 1;
+		int k = currentStep - i + 1;
 		if (k > 0)
 		{
 			showTruncatedLine(slog, log_w, "[%d,%d] %s", k, stepLoop[k], simulation[k]);
@@ -256,11 +256,10 @@ void winLog() // show log lines in selectable order
 
 void winSer()
 {
-	int i, j, k = 0, m = 0, prevL = 1;
+	int m = 0, prevL = 1;
 	char buf[MAX_STEP][240];
-	char out_line[120 + MAX_SERIAL_BUFFER];
 
-	for (i = 1; i <= currentStep; i++)
+	for (int i = 1; i <= currentStep; i++)
 	{
 		if (strlen(serialM[i]) > 0)
 		{
@@ -277,17 +276,15 @@ void winSer()
 	}
 
 	wmove(ser, 1, 1);
-	for (i = 1; i < ser_h - 1; i++)
+	for (int i = 1; i < ser_h - 1; i++)
 	{
-		int pos;
-		char *p;
-		pos = i;
+		int pos = i;
 		if (bottom_up)
 		{
 			pos = ser_h - pos - 1;
 		}
 		wmove(ser, pos, 1);
-		k = m - i + 1;
+		int k = m - i + 1;
 		if (k > 0)
 		{
 			showTruncatedLine(ser, ser_w, "%s", buf[k]);
@@ -391,7 +388,7 @@ void getString(char *in, char *out)
 void readSketchInfo()
 {
 	FILE *in;
-	char row[80], res[40], *p, *q, value[5];
+	char row[80], res[40], *p, *q;
 	int pin;
 
 	in = fopen(fileServSketch, "r");
@@ -404,67 +401,67 @@ void readSketchInfo()
 	while (fgets(row, 80, in) != NULL)
 	{
 
-		if (p = strstr(row, "SKETCH_NAME:"))
+		if ((p = strstr(row, "SKETCH_NAME:")))
 		{
 			q = strstr(p, ":");
 			q++;
 			sscanf(q, "%s", appName);
 		}
-		else if (p = strstr(row, "BOARD_TYPE:"))
+		else if ((p = strstr(row, "BOARD_TYPE:")))
 		{
 			if (strstr(row, "UNO") != NULL)
 				confBoardType = UNO;
 			if (strstr(row, "MEGA") != NULL)
 				confBoardType = MEGA;
 		}
-		else if (p = strstr(row, "WINDOWLAYOUT:"))
+		else if ((p = strstr(row, "WINDOWLAYOUT:")))
 		{
 			q = strstr(p, ":");
 			q++;
 			sscanf(q, "%d", &confWinMode);
 		}
-		//  else if(p=strstr(row,"SO_DELAY:"))
+		//  else if ((p=strstr(row,"SO_DELAY:")))
 		//    {
 		//      q = strstr(p,":");q++;
 		//      sscanf(q,"%d",appName);
 		//    }
-		else if (p = strstr(row, "SCENSIMLEN:"))
+		else if ((p = strstr(row, "SCENSIMLEN:")))
 		{
 			q = strstr(p, ":");
 			q++;
 			sscanf(q, "%d", &confSteps);
 		}
-		else if (p = strstr(row, "PINMODE_IN:"))
+		else if ((p = strstr(row, "PINMODE_IN:")))
 		{
 			pin = wCustomLog(p, res);
 			strcpy(textPinModeIn[pin], res);
 		}
-		else if (p = strstr(row, "PINMODE_OUT:"))
+		else if ((p = strstr(row, "PINMODE_OUT:")))
 		{
 			pin = wCustomLog(p, res);
 			strcpy(textPinModeOut[pin], res);
 		}
-		else if (p = strstr(row, "DIGITALWRITE_LOW:"))
+		else if ((p = strstr(row, "DIGITALWRITE_LOW:")))
 		{
 			pin = wCustomLog(p, res);
 			strcpy(textDigitalWriteLow[pin], res);
 		}
-		else if (p = strstr(row, "DIGITALWRITE_HIGH:"))
+		else if ((p = strstr(row, "DIGITALWRITE_HIGH:")))
 		{
 			pin = wCustomLog(p, res);
 			strcpy(textDigitalWriteHigh[pin], res);
 		}
-		else if (p = strstr(row, "ANALOGREAD:"))
+		else if ((p = strstr(row, "ANALOGREAD:")))
 		{
 			pin = wCustomLog(p, res);
 			strcpy(textAnalogRead[pin], res);
 		}
-		else if (p = strstr(row, "DIGITALREAD:"))
+		else if ((p = strstr(row, "DIGITALREAD:")))
 		{
 			pin = wCustomLog(p, res);
 			strcpy(textDigitalRead[pin], res);
 		}
-		else if (p = strstr(row, "ANALOGWRITE:"))
+		else if ((p = strstr(row, "ANALOGWRITE:")))
 		{
 			pin = wCustomLog(p, res);
 			strcpy(textAnalogWrite[pin], res);
@@ -529,7 +526,6 @@ void readConfig(char *cf)
 {
 	FILE *in;
 	char row[80], *p, temp[40];
-	int x;
 
 	in = fopen(cf, "r");
 	if (in == NULL)
@@ -550,26 +546,26 @@ void readConfig(char *cf)
 	{
 		if (row[0] != '#')
 		{
-			if (p = strstr(row, "BOARD_TYPE:"))
+			if ((p = strstr(row, "BOARD_TYPE:")))
 			{
 				if (strstr(row, "UNO") != NULL)
 					confBoardType = UNO;
 				else if (strstr(row, "MEGA") != NULL)
 					confBoardType = MEGA;
 			}
-			else if (p = strstr(row, "SIM_LENGTH:"))
+			else if ((p = strstr(row, "SIM_LENGTH:")))
 			{
 				sscanf(p, "%s%d", temp, &confSteps);
 			}
-			else if (p = strstr(row, "WIN_LAYOUT:"))
+			else if ((p = strstr(row, "WIN_LAYOUT:")))
 			{
 				sscanf(p, "%s%d", temp, &confWinMode);
 			}
-			else if (p = strstr(row, "SKETCH_NAME:"))
+			else if ((p = strstr(row, "SKETCH_NAME:")))
 			{
 				sscanf(p, "%s%s", temp, confSketchFile);
 			}
-			else if (p = strstr(row, "SO_DELAY:"))
+			else if ((p = strstr(row, "SO_DELAY:")))
 			{
 				sscanf(p, "%s%d", temp, &g_runDelay);
 			}
@@ -580,7 +576,6 @@ void readConfig(char *cf)
 
 void showConfig()
 {
-	int i;
 	wclear(msg);
 	wmove(msg, 1, 2);
 	wprintw(msg, " Configuration:");
@@ -645,7 +640,7 @@ void runLoop(int dir)
 
 void runLoops(int targetLoop)
 {
-	int stop;
+	int stop = 0;
 	targetLoop = checkRange(HEAL, "loop", targetLoop);
 	while (currentLoop < targetLoop && stop == 0)
 		stop = runStep(S_FORWARD);
@@ -653,18 +648,17 @@ void runLoops(int targetLoop)
 
 void runAll(int stop)
 {
-	int x;
 	stop = checkRange(HEAL, "step", stop);
 
 	if (currentStep < stop)
 	{
 		while (currentStep < stop)
-			x = runStep(S_FORWARD);
+			runStep(S_FORWARD);
 	}
 	else if (currentStep > stop)
 	{
 		while (currentStep > stop)
-			x = runStep(S_BACKWARD);
+			runStep(S_BACKWARD);
 	}
 }
 
@@ -739,7 +733,7 @@ void readSimulation()
 				showError(row, step);
 				showError(row, g_steps);
 			}
-			if (p = strstr(row, "servuinoLoop "))
+			if ((p = strstr(row, "servuinoLoop ")))
 			{
 				sscanf(p, "%s%d", temp, &loop);
 				loopPos[loop] = step;
@@ -762,14 +756,14 @@ void readSimulation()
 				strcat(simComment[g_comments], p);
 			}
 		}
-		else if (p = strstr(row, "ENDOFSIM"))
+		else if ((p = strstr(row, "ENDOFSIM")))
 		{
 			loop++;
 			loopPos[loop] = step + 1;
 			loopStep[loop] = step + 1;
 			strcpy(simulation[step + 1], "End of Simulation !");
 		}
-		else if (p = strstr(row, "SCENARIODATA"))
+		else if ((p = strstr(row, "SCENARIODATA")))
 		{
 			sscanf(p, "%s%d%d%d", temp, &scenDigital, &scenAnalog, &scenInterrupt);
 		}
@@ -821,7 +815,7 @@ void showScenario(char *fileName)
 void selectProj(int projNo, char *projName)
 {
 	FILE *in;
-	char row[SIZE_ROW], temp[SIZE_ROW], *p;
+	char row[SIZE_ROW];
 	int i = 0;
 
 	strcpy(projName, fileDefault);
@@ -847,31 +841,33 @@ void selectProj(int projNo, char *projName)
 
 void readMsg(char *fileName)
 {
-	FILE *in;
-	char row[SIZE_ROW], temp[SIZE_ROW], *p;
-	int i = 0, ch;
-
 	wclear(msg);
-	in = fopen(fileName, "r");
+	FILE *in = fopen(fileName, "r");
 	if (in == NULL)
 	{
 		showError("Unable to open msg file", -1);
 		return;
 	}
 
-	while (fgets(row, SIZE_ROW, in) != NULL && ch != 'x')
+	char line[SIZE_ROW], row[SIZE_ROW+32];
+	int i = 0;
+
+	while (fgets(line, SIZE_ROW, in) != NULL)
 	{
 		i++;
 		// If Conf List File
 		if (strstr(fileName, fileProjList) != NULL)
 		{
-			strcpy(temp, row);
-			//if(p = strstr(temp,".ino")) strcpy(p,"\0");
-			if (strstr(row, g_currentSketch))
-				sprintf(row, "> %d %s", i, temp);
+			if (strstr(line, g_currentSketch))
+				sprintf(row, "> %d %s", i, line);
 			else
-				sprintf(row, "  %d %s", i, temp);
+				sprintf(row, "  %d %s", i, line);
 		}
+		else
+		{
+			strcpy(row, line);
+		}
+		
 		if (i < msg_h - 2)
 		{
 			wmove(msg, i, 1);
@@ -882,8 +878,7 @@ void readMsg(char *fileName)
 			wmove(msg, msg_h - 2, 1);
 			wprintw(msg, "press any key (q to quit) >>");
 			wrefresh(msg);
-			ch = getchar();
-			if (ch == 'q')
+			if (getchar() == 'q')
 			{
 				fclose(in);
 				return;
@@ -894,6 +889,7 @@ void readMsg(char *fileName)
 			wprintw(msg, row);
 		}
 	}
+
 	show(msg);
 	fclose(in);
 }
@@ -959,7 +955,6 @@ void readFile(char *fileName, int line)
 
 void init(int mode)
 {
-	int i, j, k;
 
 	if (confBoardType == UNO)
 	{
@@ -1044,14 +1039,16 @@ void init(int mode)
 	waddch(uno, ACS_LLCORNER);
 	wmove(uno, ap + 1, RF + board_w - 3);
 	waddch(uno, ACS_LRCORNER);
-	for (i = 1; i < board_w - 3; i++)
+
+	for (int i = 1; i < board_w - 3; i++)
 	{
 		wmove(uno, dp - 1, RF + i);
 		waddch(uno, ACS_HLINE);
 		wmove(uno, ap + 1, RF + i);
 		waddch(uno, ACS_HLINE);
 	}
-	for (i = dp; i < ap + 1; i++)
+
+	for (int i = dp; i < ap + 1; i++)
 	{
 		wmove(uno, i, RF);
 		waddch(uno, ACS_VLINE);
@@ -1060,7 +1057,7 @@ void init(int mode)
 	}
 
 	// Pin positions on the board
-	for (i = 0; i < MAX_PIN_DIGITAL_UNO; i++)
+	for (int i = 0; i < MAX_PIN_DIGITAL_UNO; i++)
 	{
 		digPinCol[i] = RF + 4 + 4 * (MAX_PIN_DIGITAL_UNO - i - 1);
 		digPinRow[i] = dp - 1;
@@ -1073,7 +1070,8 @@ void init(int mode)
 		digStatCol[i] = RF + 4 + 4 * (MAX_PIN_DIGITAL_UNO - i - 1);
 		digStatRow[i] = dp - 2;
 	}
-	for (i = MAX_PIN_DIGITAL_UNO; i < 22; i++)
+
+	for (int i = MAX_PIN_DIGITAL_UNO; i < 22; i++)
 	{
 		digPinCol[i] = RF + 10 + 4 * i;
 		digPinRow[i] = dp - 1;
@@ -1086,10 +1084,11 @@ void init(int mode)
 		digStatCol[i] = RF + 10 + 4 * i;
 		digStatRow[i] = dp - 2;
 	}
+
 	if (confBoardType == MEGA)
 	{
-		j = dp + 3;
-		for (i = 22; i < max_digPin; i = i + 2)
+		int j = dp + 3;
+		for (int i = 22; i < max_digPin; i = i + 2)
 		{
 			j++;
 			digPinCol[i] = board_w - 35;
@@ -1103,8 +1102,9 @@ void init(int mode)
 			digStatCol[i] = board_w - 32;
 			digStatRow[i] = j;
 		}
+
 		j = dp + 3;
-		for (i = 23; i < max_digPin; i = i + 2)
+		for (int i = 23; i < max_digPin; i = i + 2)
 		{
 			j++;
 			digPinCol[i] = board_w - 11;
@@ -1119,7 +1119,8 @@ void init(int mode)
 			digStatRow[i] = j;
 		}
 	}
-	for (i = 0; i < max_anaPin; i++)
+
+	for (int i = 0; i < max_anaPin; i++)
 	{
 		anaPinCol[i] = RF + 27 + 5 * i;
 		anaPinRow[i] = ap + 1;
@@ -1129,27 +1130,27 @@ void init(int mode)
 		anaActRow[i] = ap - 2;
 	}
 
-	for (i = 0; i < max_digPin; i++)
+	for (int i = 0; i < max_digPin; i++)
 	{
 		wmove(uno, digIdRow[i], digIdCol[i]);
 		wprintw(uno, "%2d", i);
 	}
-	for (i = 0; i < max_digPin; i++)
+	for (int i = 0; i < max_digPin; i++)
 	{
 		wmove(uno, digPinRow[i], digPinCol[i]);
 		waddch(uno, ACS_BULLET);
 	}
-	//for(i=0;i<max_digPin;i++){wmove(uno,digActRow[i],digActCol[i]); wprintw(uno,"a");}
-	//for(i=0;i<max_digPin;i++){wmove(uno,digStatRow[i],digStatCol[i]);wprintw(uno,"s");}
-	//for(i=0;i<max_digPin;i++){wmove(uno,digValRow[i],digValCol[i]);wprintw(uno,"v");}
+	//for(int i=0;i<max_digPin;i++){wmove(uno,digActRow[i],digActCol[i]); wprintw(uno,"a");}
+	//for(int i=0;i<max_digPin;i++){wmove(uno,digStatRow[i],digStatCol[i]);wprintw(uno,"s");}
+	//for(int i=0;i<max_digPin;i++){wmove(uno,digValRow[i],digValCol[i]);wprintw(uno,"v");}
 
-	for (i = 0; i < max_anaPin; i++)
+	for (int i = 0; i < max_anaPin; i++)
 	{
 		wmove(uno, ap - 1, anaPinCol[i] - 1);
 		wprintw(uno, "A%1d", i);
 	}
-	//for(i=0;i<max_anaPin;i++){wmove(uno,anaValRow[i],anaValCol[i]); waddch(uno,ACS_BULLET);}
-	for (i = 0; i < max_anaPin; i++)
+	//for(int i=0;i<max_anaPin;i++){wmove(uno,anaValRow[i],anaValCol[i]); waddch(uno,ACS_BULLET);}
+	for (int i = 0; i < max_anaPin; i++)
 	{
 		wmove(uno, anaPinRow[i], anaPinCol[i]);
 		waddch(uno, ACS_BULLET);
@@ -1276,9 +1277,11 @@ void init(int mode)
 	wbkgd(ser, COLOR_PAIR(SER_COLOR));
 	show(ser);
 
+	int i = 0;
 	for (i = 0; i < log_w; i++)
 		logBlankRow[i] = ' ';
 	logBlankRow[i] = '\0';
+
 	for (i = 0; i < ser_w; i++)
 		serBlankRow[i] = ' ';
 	serBlankRow[i] = '\0';
@@ -1319,7 +1322,7 @@ char *replace_str(char *str, char orig[], char rep[])
 	sprintf(buffer + (p - str), "%s%s", rep, p + strlen(orig));
 	strcpy(work, buffer);
 
-	while (p = strstr(work, orig))
+	while ((p = strstr(work, orig)))
 	{
 		strncpy(buffer, work, p - work); // Copy characters from 'str' start to 'orig' st$
 		buffer[p - work] = '\0';
@@ -1334,7 +1337,6 @@ void instrument(char *fileFrom, char *fileTo)
 {
 	FILE *in, *out;
 	char row[SIZE_ROW], sTemp[80], sIn[80], *p;
-	int res = 0, count;
 
 	in = fopen(fileFrom, "r");
 	if (in == NULL)
@@ -1351,7 +1353,7 @@ void instrument(char *fileFrom, char *fileTo)
 		return;
 	}
 
-	count = 0;
+	int count = 0;
 	while (fgets(row, SIZE_ROW, in) != NULL)
 	{
 		count++;
@@ -1460,47 +1462,42 @@ void instrument(char *fileFrom, char *fileTo)
 
 void anyErrors()
 {
-	int x;
-	char syscom[200];
-
 	g_existError = S_NO;
 
 	// FIXME: do not use system calls
-	x = system("rm temp.txt");
+	system("rm temp.txt");
+
 	// FIXME: this is neither nice nor safe
+	char syscom[512];
 	sprintf(syscom, "cat %s %s %s> %s", fileError, fileServError, fileCopyError, fileTemp);
-	x = system(syscom);
-	x = countRowsInFile(fileTemp);
+	system(syscom);
+
+	int x = countRowsInFile(fileTemp);
 	if (x > 0 && x != 999)
 	{
 		g_existError = S_YES;
 		g_currentSketchStatus = SO_RUN_ERROR;
 	}
-	if (x == 999)
-		putMsg(2, "Unable to read error file");
+	else if (x == 999) putMsg(2, "Unable to read error file");
+
 	show(uno);
 }
 
 int loadSketch(char sketch[])
 {
-	int x, ch, res;
-	char syscom[120];
-
 	instrument(sketch, fileServSketch);
 
 	// FIXME: improve this
-	sprintf(syscom, "cd servuino; g++ -O2 -o servuino servuino.c > g++.result 2>&1;");
-	x = system(syscom);
+	system("cd servuino; g++ -O2 -o servuino servuino.c > g++.result 2>&1;");
 
-	x = countRowsInFile(fileServComp);
-	if (x > 0)
+	if (countRowsInFile(fileServComp) > 0)
 	{
 		readMsg(fileServComp);
 		wmove(msg, msg_h - 2, 1);
 		wprintw(msg, "press any key to continue >>");
 		wrefresh(msg);
-		ch = getchar();
-		putMsg(2, "Check your sketch or report an issue to Simuino");
+		getchar();
+		putMsg(2, "Check your sketch or report an issue.");
 		return 1;
 	}
 	readSketchInfo();
@@ -1572,8 +1569,8 @@ void readTime()
 int readStatus()
 {
 	FILE *in;
-	char row[SIZE_ROW], data[SIZE_ROW], junk[10], *pch, *p;
-	int pin = 0, step = 0, res = 0;
+	char row[SIZE_ROW], junk[10], *pch, *p;
+	int pin = 0, step = 0;
 
 	in = fopen(fileServPinmod, "r");
 	if (in == NULL)
@@ -1708,12 +1705,11 @@ int readStatus()
 
 void readSerial()
 {
-	FILE *in;
 	char *left, *right;
-	char row[SIZE_ROW], line[SIZE_ROW], value[SIZE_ROW], *p;
-	int step = 0, res = 0;
+	char row[SIZE_ROW], line[SIZE_ROW];
+	int step = 0;
 
-	in = fopen(fileServSerial, "r");
+	FILE *in = fopen(fileServSerial, "r");
 	if (in == NULL)
 	{
 		showError("readSerial: Unable to open file", -1);
@@ -1721,7 +1717,7 @@ void readSerial()
 	}
 	else
 	{
-		p = fgets(row, SIZE_ROW, in); // read first header line in file
+		fgets(row, SIZE_ROW, in); // read first header line in file
 		while (fgets(row, SIZE_ROW, in) != NULL)
 		{
 			//strcpy(serialM[step],row);
@@ -1747,19 +1743,11 @@ void readSerial()
 
 void displayStatus()
 {
-	int i;
-	char *pch, res[100][240], temp[40];
-	int count = 0, step = 0, mode, pin, nd, na, value;
-	int digPinValue[MAX_PIN_DIGITAL_MEGA];
-	int anaPinValue[MAX_PIN_ANALOG_MEGA];
-
-	// ======= Display =======
-
 	// Digital Pin Mode
-	for (pin = 0; pin < max_digPin; pin++)
+	for (int pin = 0; pin < max_digPin; pin++)
 	{
-		//mode = digitalMode[pin];
-		mode = x_pinMode[pin][currentStep];
+		//int mode = digitalMode[pin];
+		int mode = x_pinMode[pin][currentStep];
 		wmove(uno, digPinRow[pin] - 1, digPinCol[pin]);
 		if (pin < 22)
 			waddch(uno, ACS_VLINE);
@@ -1802,9 +1790,9 @@ void displayStatus()
 	}
 
 	// Digital Pin Value
-	for (pin = 0; pin < max_totPin; pin++)
+	for (int pin = 0; pin < max_totPin; pin++)
 	{
-		value = x_pinDigValue[pin][currentStep];
+		int value = x_pinDigValue[pin][currentStep];
 		if (pin < max_digPin)
 			wmove(uno, digPinRow[pin], digPinCol[pin]);
 		else
@@ -1821,9 +1809,9 @@ void displayStatus()
 	}
 
 	// Analog Pin Value
-	for (pin = 0; pin < max_totPin; pin++)
+	for (int pin = 0; pin < max_totPin; pin++)
 	{
-		value = x_pinAnaValue[pin][currentStep];
+		int value = x_pinAnaValue[pin][currentStep];
 		if (pin < max_digPin)
 			wmove(uno, digValRow[pin], digValCol[pin] - 3);
 		else
@@ -1836,9 +1824,9 @@ void displayStatus()
 	}
 
 	// Action event
-	for (pin = 0; pin < max_totPin; pin++)
+	for (int pin = 0; pin < max_totPin; pin++)
 	{
-		value = x_pinRW[pin][currentStep];
+		int value = x_pinRW[pin][currentStep];
 		if (pin < max_digPin)
 			wmove(uno, digActRow[pin], digActCol[pin]);
 		else
@@ -1858,7 +1846,7 @@ void displayStatus()
 void readSetting()
 {
 	FILE *in;
-	char row[120], sketch[120], *p, *q, name[120];
+	char row[120], *p, *q;
 
 	in = fopen("settings.txt", "r");
 	if (in == NULL)
@@ -1870,7 +1858,7 @@ void readSetting()
 
 	while (fgets(row, 120, in) != NULL)
 	{
-		if (p = strstr(row, "SKETCH:"))
+		if ((p = strstr(row, "SKETCH:")))
 		{
 			q = strstr(p, ":");
 			q++;

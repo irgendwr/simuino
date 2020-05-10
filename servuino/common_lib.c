@@ -88,8 +88,8 @@ int setRange(int board)
 
 int checkRange(int mode, const char check[], int value)
 {
-	int i, j, minx, maxx,res;
-	char temp[120], message[180];
+	int minx, maxx, res;
+	char message[128];
 
 	if (mode == HEAL)
 		res = value;
@@ -99,83 +99,82 @@ int checkRange(int mode, const char check[], int value)
 	// PWM pins
 	if (strstr(check, "pwmpin") != NULL)
 	{
-		strcpy(message, "Allowed PWM Pins: 3,5,6,9,10,11");
 		if (g_boardType == UNO)
 		{
 			if (value != 3 && value != 5 && value != 6 && value != 9 && value != 10 && value != 11)
 			{
-				sprintf(temp, "%s - %d", message, value);
-				errorLog(temp,value);
+				sprintf(message, "%d is not in allowed PWM Pins: 3, 5, 6, 9, 10, 11", value);
+				errorLog(message, value);
 				return S_NOK;
 			}
-			else
-				return S_OK;
+			else return S_OK;
 		}
 		else if (g_boardType == MEGA)
 		{
 			if (value < 0 || value > 13)
 			{
-				sprintf(temp, "%s - %d", message, value);
-				errorLog(temp,value);
+				sprintf(message, "%d is not in allowed PWM Pins: 0-13", value);
+				errorLog(message, value);
 				return S_NOK;
 			}
-			else
-				return S_OK;
+			else return S_OK;
 		}
 	}
+
+	char category[64];
 
 	// set ranges
 	if (strstr(check, "digval") != NULL)
 	{
-		strcpy(message, "Digital Value");
+		strcpy(category, "Digital Value");
 		maxx = max_digVal;
 		minx = min_digVal;
 	}
 	else if (strstr(check, "anaval") != NULL)
 	{
-		strcpy(message, "Analog Value");
+		strcpy(category, "Analog Value");
 		maxx = max_anaVal;
 		minx = min_anaVal;
 	}
 	else if (strstr(check, "pwmval") != NULL)
 	{
-		strcpy(message, "PWM Value");
+		strcpy(category, "PWM Value");
 		maxx = max_pwm;
 		minx = min_pwm;
 	}
 	else if (strstr(check, "digpin") != NULL)
 	{
-		strcpy(message, "Digital Pin");
+		strcpy(category, "Digital Pin");
 		maxx = max_digPin;
 		minx = min_digPin;
 	}
 	else if (strstr(check, "anapin") != NULL)
 	{
-		strcpy(message, "Analog Pin");
+		strcpy(category, "Analog Pin");
 		maxx = max_anaPin;
 		minx = min_anaPin;
 	}
 	else if (strstr(check, "step") != NULL)
 	{
-		strcpy(message, "Step out of range");
+		strcpy(category, "Step out of range");
 		maxx = max_steps;
 		minx = 1;
 	}
 	else if (strstr(check, "loop") != NULL)
 	{
-		strcpy(message, "Loop out of range");
+		strcpy(category, "Loop out of range");
 		maxx = max_loops;
 		minx = 0;
 	}
 	else if (strstr(check, "interrupt") != NULL)
 	{
-		strcpy(message, "Interrupt out of range");
+		strcpy(category, "Interrupt out of range");
 		maxx = max_irPin;
 		minx = min_irPin;
 	}
 	else
 	{
-		strcpy(message, "Undefined Range Control");
+		strcpy(category, "Undefined Range Control");
 		maxx = 0;
 		minx = 0;
 	}
@@ -183,14 +182,14 @@ int checkRange(int mode, const char check[], int value)
 	// evaluate
 	if (maxx == 0 && minx == 0)
 	{
-		sprintf(temp, "Unknown:%s", message);
-		errorLog(temp, value);
+		sprintf(message, "Unknown: %s", category);
+		errorLog(message, value);
 		return S_NOK;
 	}
 	else if (value > maxx)
 	{
-		sprintf(temp, "%s %d >", message, value);
-		errorLog(temp, maxx);
+		sprintf(message, "%s %d >", category, value);
+		errorLog(message, maxx);
 		if (mode == HEAL)
 			res = maxx;
 		else
@@ -198,8 +197,8 @@ int checkRange(int mode, const char check[], int value)
 	}
 	else if (value < minx)
 	{
-		sprintf(temp, "%s %d <", message, value);
-		errorLog(temp, minx);
+		sprintf(message, "%s %d <", category, value);
+		errorLog(message, minx);
 		if (mode == HEAL)
 			res = minx;
 		else
