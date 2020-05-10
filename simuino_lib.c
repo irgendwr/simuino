@@ -1758,6 +1758,7 @@ void displayStatus()
 		switch (mode)
 		{
 		case INPUT:
+		case INPUT_PULLUP:
 			wprintw(uno, "In ");
 			break;
 		case OUTPUT:

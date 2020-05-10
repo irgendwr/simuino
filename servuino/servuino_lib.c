@@ -109,7 +109,7 @@ int servuinoFunc(int event, int pin, int value, const char *p, unsigned char uc)
 		if (fail == 0)
 		{
 			x_pinMode[pin] = value;
-			if (value == INPUT)
+			if (value == INPUT || value == INPUT_PULLUP)
 			{
 				// Set pin status according to scenario when mode is INPUT
 				res = x_pinScenario[pin][g_curStep];
@@ -166,7 +166,7 @@ int servuinoFunc(int event, int pin, int value, const char *p, unsigned char uc)
 		sprintf(eventText, "digitalRead pin=%d value=%d", pin, res);
 		sprintf(custText, "%s %d", g_custText[event][pin], res);
 		//value = getDigitalPinValue(pin,currentStep);
-		if (x_pinMode[pin] != INPUT)
+		if (x_pinMode[pin] != INPUT && x_pinMode[pin] != INPUT_PULLUP)
 			errorLog("DigitalRead when pin Mode is OUPUT", pin);
 	}
 	else if (event == S_ANALOG_WRITE) //PWM pinMode OUTPUT not necessary (see arduino.com)
@@ -382,76 +382,76 @@ void writeRegister(int digital, int reg, int port, int value)
 	if (reg == R_PORT && digital == 1) // 0=LOW 1=HIGH
 	{
 		if (port <= 7 && port >= 0)
-			bitWrite(&PORTD, port, value);
+			cbitWrite(&PORTD, port, value);
 		if (port >= 8 && port <= 15)
-			bitWrite(&PORTB, port - 8, value);
+			cbitWrite(&PORTB, port - 8, value);
 		if (port >= 16 && port <= 23)
-			bitWrite(&PORTE, port - 16, value);
+			cbitWrite(&PORTE, port - 16, value);
 		if (port >= 24 && port <= 31)
-			bitWrite(&PORTF, port - 24, value);
+			cbitWrite(&PORTF, port - 24, value);
 		if (port >= 32 && port <= 39)
-			bitWrite(&PORTK, port - 32, value);
+			cbitWrite(&PORTK, port - 32, value);
 		if (port >= 40 && port <= 47)
-			bitWrite(&PORTL, port - 40, value);
+			cbitWrite(&PORTL, port - 40, value);
 		if (port >= 48 && port <= 55)
-			bitWrite(&PORTM, port - 48, value);
+			cbitWrite(&PORTM, port - 48, value);
 	}
 	if (reg == R_PORT && digital == 0)
 	{
 		if (port <= 7 && port >= 0)
-			bitWrite(&PORTC, port, value);
+			cbitWrite(&PORTC, port, value);
 		if (port <= 15 && port >= 8)
-			bitWrite(&PORTN, port - 8, value);
+			cbitWrite(&PORTN, port - 8, value);
 	}
 	//-------------------------------------------------------
 	if (reg == R_DDR && digital == 1) // 0=INPUT 1=OUTPUT
 	{
 		if (port <= 7 && port >= 0)
-			bitWrite(&DDRD, port, value);
+			cbitWrite(&DDRD, port, value);
 		if (port >= 8 && port <= 13)
-			bitWrite(&DDRB, port - 8, value);
+			cbitWrite(&DDRB, port - 8, value);
 		if (port >= 16 && port <= 23)
-			bitWrite(&DDRE, port - 16, value);
+			cbitWrite(&DDRE, port - 16, value);
 		if (port >= 24 && port <= 31)
-			bitWrite(&DDRF, port - 24, value);
+			cbitWrite(&DDRF, port - 24, value);
 		if (port >= 32 && port <= 39)
-			bitWrite(&DDRK, port - 32, value);
+			cbitWrite(&DDRK, port - 32, value);
 		if (port >= 40 && port <= 47)
-			bitWrite(&DDRL, port - 40, value);
+			cbitWrite(&DDRL, port - 40, value);
 		if (port >= 48 && port <= 55)
-			bitWrite(&DDRM, port - 48, value);
+			cbitWrite(&DDRM, port - 48, value);
 	}
 	if (reg == R_DDR && digital == 0)
 	{
 		if (port <= 7 && port >= 0)
-			bitWrite(&DDRC, port, value);
+			cbitWrite(&DDRC, port, value);
 		if (port <= 15 && port >= 8)
-			bitWrite(&DDRN, port - 8, value);
+			cbitWrite(&DDRN, port - 8, value);
 	}
 	//-------------------------------------------------------
 	if (reg == R_PIN && digital == 1) // 0=INPUT 1=OUTPUT
 	{
 		if (port <= 7 && port >= 0)
-			bitWrite(&PIND, port, value);
+			cbitWrite(&PIND, port, value);
 		if (port >= 8 && port <= 13)
-			bitWrite(&PINB, port - 8, value);
+			cbitWrite(&PINB, port - 8, value);
 		if (port >= 16 && port <= 23)
-			bitWrite(&PINE, port - 16, value);
+			cbitWrite(&PINE, port - 16, value);
 		if (port >= 24 && port <= 31)
-			bitWrite(&PINF, port - 24, value);
+			cbitWrite(&PINF, port - 24, value);
 		if (port >= 32 && port <= 39)
-			bitWrite(&PINK, port - 32, value);
+			cbitWrite(&PINK, port - 32, value);
 		if (port >= 40 && port <= 47)
-			bitWrite(&PINL, port - 40, value);
+			cbitWrite(&PINL, port - 40, value);
 		if (port >= 48 && port <= 55)
-			bitWrite(&PINM, port - 48, value);
+			cbitWrite(&PINM, port - 48, value);
 	}
 	if (reg == R_PIN && digital == 0)
 	{
 		if (port <= 7 && port >= 0)
-			bitWrite(&PINC, port, value);
+			cbitWrite(&PINC, port, value);
 		if (port <= 15 && port >= 8)
-			bitWrite(&PINN, port - 8, value);
+			cbitWrite(&PINN, port - 8, value);
 	}
 }
 
@@ -462,79 +462,79 @@ int readRegister(int reg, int port)
 	if (reg == R_PORT && port < g_nDigPins) // 0=LOW 1=HIGH
 	{
 		if (port >= 0 && port <= 7)
-			value = bitRead(PORTD, port);
+			value = cbitRead(PORTD, port);
 		if (port >= 8 && port <= 15)
-			value = bitRead(PORTB, port - 8);
+			value = cbitRead(PORTB, port - 8);
 		if (port >= 16 && port <= 23)
-			value = bitRead(PORTE, port - 16);
+			value = cbitRead(PORTE, port - 16);
 		if (port >= 24 && port <= 31)
-			value = bitRead(PORTF, port - 24);
+			value = cbitRead(PORTF, port - 24);
 		if (port >= 32 && port <= 39)
-			value = bitRead(PORTK, port - 32);
+			value = cbitRead(PORTK, port - 32);
 		if (port >= 40 && port <= 47)
-			value = bitRead(PORTL, port - 40);
+			value = cbitRead(PORTL, port - 40);
 		if (port >= 48 && port <= 55)
-			value = bitRead(PORTM, port - 48);
+			value = cbitRead(PORTM, port - 48);
 	}
 	if (reg == R_PORT && port >= g_nDigPins) // Analog Pins
 	{
 		pin = port - g_nDigPins;
 		if (pin <= 7 && pin >= 0)
-			value = bitRead(PORTC, pin);
+			value = cbitRead(PORTC, pin);
 		if (pin <= 15 && pin >= 8)
-			value = bitRead(PORTN, pin - 8); // verify
+			value = cbitRead(PORTN, pin - 8); // verify
 	}
 	//-------------------------------------------------------
 	if (reg == R_DDR && port < g_nDigPins) // 0=INPUT 1=OUTPUT
 	{
 		if (port <= 7 && port >= 0)
-			value = bitRead(DDRD, port);
+			value = cbitRead(DDRD, port);
 		if (port >= 8 && port <= 15)
-			value = bitRead(DDRB, port - 8);
+			value = cbitRead(DDRB, port - 8);
 		if (port >= 16 && port <= 23)
-			value = bitRead(DDRE, port - 16);
+			value = cbitRead(DDRE, port - 16);
 		if (port >= 24 && port <= 31)
-			value = bitRead(DDRF, port - 24);
+			value = cbitRead(DDRF, port - 24);
 		if (port >= 32 && port <= 39)
-			value = bitRead(DDRK, port - 32);
+			value = cbitRead(DDRK, port - 32);
 		if (port >= 40 && port <= 47)
-			value = bitRead(DDRL, port - 40);
+			value = cbitRead(DDRL, port - 40);
 		if (port >= 48 && port <= 55)
-			value = bitRead(DDRM, port - 48);
+			value = cbitRead(DDRM, port - 48);
 	}
 	if (reg == R_DDR && port >= g_nDigPins) // Analog Pins
 	{
 		pin = port - g_nDigPins;
 		if (pin <= 7 && pin >= 0)
-			value = bitRead(DDRC, pin);
+			value = cbitRead(DDRC, pin);
 		if (pin <= 15 && pin >= 8)
-			value = bitRead(DDRN, pin - 8); // verify
+			value = cbitRead(DDRN, pin - 8); // verify
 	}
 	//-------------------------------------------------------
 	if (reg == R_PIN && port < g_nDigPins) // 0=INPUT 1=OUTPUT
 	{
 		if (port <= 7 && port >= 0)
-			value = bitRead(PIND, port);
+			value = cbitRead(PIND, port);
 		if (port >= 8 && port <= 15)
-			value = bitRead(PINB, port - 8);
+			value = cbitRead(PINB, port - 8);
 		if (port >= 16 && port <= 23)
-			value = bitRead(PINE, port - 16); // verify
+			value = cbitRead(PINE, port - 16); // verify
 		if (port >= 24 && port <= 31)
-			value = bitRead(PINF, port - 24); // verify
+			value = cbitRead(PINF, port - 24); // verify
 		if (port >= 32 && port <= 39)
-			value = bitRead(PINK, port - 32); // verify
+			value = cbitRead(PINK, port - 32); // verify
 		if (port >= 40 && port <= 47)
-			value = bitRead(PINL, port - 40); // verify
+			value = cbitRead(PINL, port - 40); // verify
 		if (port >= 48 && port <= 55)
-			value = bitRead(PINM, port - 48); // verify
+			value = cbitRead(PINM, port - 48); // verify
 	}
 	if (reg == R_PIN && port >= g_nDigPins) // Analog Pins
 	{
 		pin = port - g_nDigPins;
 		if (pin <= 7 && pin >= 0)
-			value = bitRead(PINC, pin);
+			value = cbitRead(PINC, pin);
 		if (pin <= 15 && pin >= 8)
-			value = bitRead(PINN, pin - 8); // verify
+			value = cbitRead(PINN, pin - 8); // verify
 	}
 
 	return value;
@@ -656,27 +656,31 @@ void statusLog()
 		if (g_boardType == UNO)
 		{
 			in_out = readRegister(R_DDR, i);
-			if (in_out == 0)
+			if (in_out == INPUT || in_out == INPUT_PULLUP)
+			{
+				in_out = INPUT;
 				z[i] = 'I';
-			if (in_out == 1)
+			}
+			else if (in_out == OUTPUT)
+			{
 				z[i] = 'o';
+			}
 		}
 		else // MEGA
 		{
-			if (digitalMode[i] == INPUT)
+			if (digitalMode[i] == INPUT || in_out == INPUT_PULLUP)
 			{
-				in_out = 0;
+				in_out = INPUT;
 				z[i] = 'I';
 			}
-			if (digitalMode[i] == OUTPUT)
+			else if (digitalMode[i] == OUTPUT)
 			{
-				in_out = 1;
 				z[i] = 'o';
 			}
 		}
 
 		x = digitalMode[i];
-		if (in_out == 0) // INPUT
+		if (in_out == INPUT || in_out == INPUT_PULLUP) // INPUT
 		{
 			if (x == FREE)
 				z[i] = '-';

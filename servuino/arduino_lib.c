@@ -20,7 +20,7 @@
 
 void pinMode(int pin,int mode)
 {
-	if (mode == INPUT)
+	if (mode == INPUT || mode == INPUT_PULLUP)
 		servuinoFunc(S_PIN_MODE_INPUT, pin, mode, NULL, 0);
 	if (mode == OUTPUT)
 		servuinoFunc(S_PIN_MODE_OUTPUT, pin, mode, NULL, 0);
@@ -114,6 +114,7 @@ void delayMicroseconds(int us)
 }
 
 //------ Math ------------------------------
+/*
 void test_math()
 {
 	double r,x,z;
@@ -124,11 +125,14 @@ void test_math()
 	r = pow(x,z);
 	r = sqrt(y);
 }
+*/
 
+/*
 double sq(double x)
 {
 	return sqrt(x);
 }
+*/
 
 int map(int x, int fromLow, int fromHigh, int toLow, int toHigh)
 {
@@ -138,14 +142,17 @@ int map(int x, int fromLow, int fromHigh, int toLow, int toHigh)
 	return y;
 }
 
+/*
 int constrain(int x, int min, int max)
 {
 	if (x > max) return max;
 	if (x < min) return min;
 	return x;
 }
+*/
 
 //------ Trigonometry ----------------------
+/*
 void test_trigonometry()
 {
 	double x;
@@ -153,6 +160,7 @@ void test_trigonometry()
 	x = cos(1);
 	x = tan(1);
 }
+*/
 
 //------ Random Numbers --------------------
 void randomSeed(int seed)
@@ -163,7 +171,7 @@ void randomSeed(int seed)
 long random(long upperLimit)
 {
 	long x = RAND_MAX/upperLimit;
-	x = long(rand()/x);
+	x = (long)rand()/x;
 	return x;
 }
 
@@ -181,12 +189,12 @@ long random(long lowerLimit, long upperLimit)
 
 //------ Bits and Bytes --------------------
 
-unsigned char lowByte(int x)
+unsigned char clowByte(int x)
 {
 	return x & 0xff;
 }
 
-unsigned char highByte(int x)
+unsigned char chighByte(int x)
 {
 	unsigned char y;
 	x = x&0xff00;
@@ -194,36 +202,19 @@ unsigned char highByte(int x)
 	return y;
 }
 
-int bitRead(int x, int n)
-{
-	int bit;
-	//printf("bitRead: x=%d n=%d PORTB=%d\n", x, n, PORTB);
-	bit = x >> n;
-	bit = bit & 0x0001;
-	//printf("bitRead: x=%d n=%d PORTB=%d bit=%d\n", x, n, PORTB, bit);
-	return bit;
-}
-
-void bitSet(unsigned int *x, int n)
+void cbitSet(unsigned int *x, int n)
 {
 	int mask = 1 << n;
 	*x = *x | mask;
 }
 
-void bitClear(unsigned int *x, int n)
+void cbitClear(unsigned int *x, int n)
 {
 	int mask = 1 << n;
 	*x = *x & ~mask;
 }
 
-void bitWrite(unsigned int *x, int n, int b)
-{
-	//printf("bitWrite: %d %d %d PORTB=%d\n",*x,n,b,PORTB);
-	if (b == 0) bitClear(x, n);
-	else bitSet(x, n);
-}
-
-int bit(int n)
+int cbit(int n)
 {
 	int res;
 	//for (i=0;i<n;i++) res = res*2;
@@ -231,6 +222,22 @@ int bit(int n)
 	return res;
 }
 
+int cbitRead(int x, int n)
+{
+	int bit;
+	//printf("cbitRead: x=%d n=%d PORTB=%d\n", x, n, PORTB);
+	bit = x >> n;
+	bit = bit & 0x0001;
+	//printf("cbitRead: x=%d n=%d PORTB=%d bit=%d\n", x, n, PORTB, bit);
+	return bit;
+}
+
+void cbitWrite(unsigned int *x, int n, int b)
+{
+	//printf("cbitWrite: %d %d %d PORTB=%d\n",*x,n,b,PORTB);
+	if (b == 0) cbitClear(x, n);
+	else cbitSet(x, n);
+}
 
 //------ External Interrupts ---------------
 

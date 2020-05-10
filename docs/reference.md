@@ -26,6 +26,10 @@
 |                | `max()`               | yes     |
 |                | `abs()`               | yes     |
 |                | `constrain()`         | yes     |
+|                | `round()`             | yes     |
+|                | `radians()`           | yes     |
+|                | `degrees()`           | yes     |
+|                | `sq()`                | yes     |
 |                | `map()`               | yes     |
 |                | `pow()`               | yes     |
 |                | `sqrt()`              | yes     |
@@ -36,13 +40,14 @@
 |                | `randomSeed()`        | yes     |
 |                | `random()`            | yes     |
 | Bits and Bytes |                       |         |
-|                | `lowByte()`           | no      |
-|                | `highByte()`          | no      |
-|                | `bitRead()`           | no      |
-|                | `bitWrite()`          | no      |
-|                | `bitSet()`            | no      |
-|                | `bitClear()`          | no      |
-|                | `bit()`               | no      |
+|                | `lowByte()`           | yes     |
+|                | `highByte()`          | yes     |
+|                | `bitRead()`           | yes     |
+|                | `bitWrite()`          | yes     |
+|                | `bitSet()`            | yes     |
+|                | `bitClear()`          | yes     |
+|                | `bitToggle()`         | yes     |
+|                | `bit()`               | yes     |
 | Interrupts     |                       |         |
 |                | `attachInterrupt()`   | yes     |
 |                | `detachInterrupt()`   | yes     |

@@ -53,8 +53,6 @@ void (*interrupt[9])();
 #define R_DDR  2
 #define R_PIN  3
 
-void bitWrite(unsigned int *x, int n, int b);
-int  bitRead(int x, int n);
 int  readRegister(int reg, int port);
 void writeRegister(int digital, int reg, int port, int value);
 void registerLog();
