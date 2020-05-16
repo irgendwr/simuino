@@ -158,7 +158,7 @@ int checkRange(int mode, const char check[], int value)
 	{
 		strcpy(category, "Step out of range");
 		maxx = max_steps;
-		minx = 1;
+		minx = 0;
 	}
 	else if (strstr(check, "loop") != NULL)
 	{
