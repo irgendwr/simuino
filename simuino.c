@@ -607,6 +607,10 @@ void cmdLoop()
 			show(slog);
 			//readMsg(g_currentSketch);
 			readMsg(fileProjList);
+
+			// load sketch
+			g_scenSource = 0;
+			loadCurrentSketch();
 		}
 		else if (strstr(sstr, "data"))
 		{
