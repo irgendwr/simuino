@@ -384,9 +384,24 @@ void cmdLoop()
 				stop = atoi(command[1]);
 			stop = checkRange(HEAL, "step", stop);
 
-			runMode(stop);
-			if (stop == 0)
-				putMsg(2, "Back in Admin Mode!");
+			while (1)
+			{
+				int status = runMode(stop);
+				
+				if (status == 1)
+				{
+					// reload sketch (Q)
+					g_scenSource = 0;
+					loadCurrentSketch();
+				}
+				else
+				{
+					// quit runMode (q)
+					break;
+				}
+			}
+
+			if (stop == 0) putMsg(2, "Back in Admin Mode!");
 		}
 		else if (strstr(sstr, "res")) // reset simulation
 		{
@@ -647,7 +662,7 @@ void cmdLoop()
 	}
 }
 
-void runMode(int stop)
+int runMode(int stop)
 {
 	int step, res = 0, ok = 0;
 	char ch, tempName[80], syscom[120], temp[80];
@@ -662,7 +677,8 @@ void runMode(int stop)
 			stop = g_steps;
 		//if(stop > currentStep)
 		runAll(stop);
-		return;
+		// quit runMode
+		return 0;
 	}
 
 	putMsg(3, "Run Mode. Press h for help.");
@@ -683,8 +699,13 @@ void runMode(int stop)
 		switch (ch)
 		{
 		case 'q':
-			return;
+			// quit runMode
+			return 0;
+		case 'Q':
+			// reload sketch
+			return 1;
 		case 'h':
+			// help
 			readMsg(fileInfoRun);
 			break;
 		case 'i':
@@ -866,6 +887,8 @@ putMsg(2,syscom);
 			putMsg(msg_h - 2, temp);
 		}
 	}
+
+	return 0;
 }
 
 int main(/* int argc, char *argv[] */)

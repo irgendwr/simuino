@@ -9,7 +9,7 @@ void mLog1(const char *p, int value1);
 void wLog1(const char *p, int value1);
 void wLog2(const char *p, int value1, int value2);
 void debug(char *msg);
-void runMode(int stop);
+int runMode(int stop);
 int  runStep(int dir);
 void cmdLoop();
 void iDelay(int ms);

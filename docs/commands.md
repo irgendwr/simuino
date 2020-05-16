@@ -20,6 +20,7 @@
 | --- | -------------------------------------------- |
 | h   | Shows this information.                      |
 | q   | Quits Run Mode. Switches back to Admin Mode. |
+| Q   | Reloads sketch.                              |
 | w   | Toggles window layout mode.                  |
 
 ### Step/Go-to
