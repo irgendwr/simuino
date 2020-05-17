@@ -91,6 +91,8 @@ int servuinoFunc(int event, int pin, int value, const char *p, unsigned char uc)
 
 	sprintf(eventText, "%d Unknown event: %d pin=%d value=%d", g_curStep, event, pin, value);
 
+	// FIXME: this is a horrible mess
+
 	if (event == S_UNIMPLEMENTED)
 	{
 		sprintf(eventText, "Unimplemented: %s", p);
@@ -375,6 +377,40 @@ int servuinoFunc(int event, int pin, int value, const char *p, unsigned char uc)
 		interruptNow();
 
 	return res;
+}
+
+void logprintln(float x)
+{
+	char eventText[120];
+	char custText[32];
+
+	strcpy(custText, "no-text");
+
+	sprintf(eventText, "Serial.println(float) %f", x);
+	fprintf(f_serial, "%d NL [%f]\n", g_curStep, x);
+	if (g_serialMode != S_ON)
+		errorLog("Serial print without serial.begin", g_curStep);
+
+	logEvent(eventText);
+	logCust(custText);
+	writeStatus();
+}
+
+void logprintln(double x)
+{
+	char eventText[120];
+	char custText[32];
+
+	strcpy(custText, "no-text");
+
+	sprintf(eventText, "Serial.println(double) %f", x);
+	fprintf(f_serial, "%d NL [%f]\n", g_curStep, x);
+	if (g_serialMode != S_ON)
+		errorLog("Serial print without serial.begin", g_curStep);
+
+	logEvent(eventText);
+	logCust(custText);
+	writeStatus();
 }
 
 void writeRegister(int digital, int reg, int port, int value)

@@ -41,13 +41,14 @@ void (*interrupt[9])();
 #define S_SERIAL_PRINTLN_STRING   28
 #define S_SERIAL_PRINTLN_SSTRING  29
 #define S_SERIAL_PRINTLN_VOID     30
-#define S_SERIAL_WRITE            31
+#define S_SERIAL_PRINTLN_FLOAT    31
+#define S_SERIAL_PRINTLN_DOUBLE   32
+#define S_SERIAL_PRINT_UCHAR      33
+#define S_SERIAL_PRINTLN_UCHAR    34
+#define S_SERIAL_WRITE            39
 
-#define S_EEPROM_READ             32
-#define S_EEPROM_WRITE            33
-
-#define S_SERIAL_PRINT_UCHAR      34
-#define S_SERIAL_PRINTLN_UCHAR    35
+#define S_EEPROM_READ             40
+#define S_EEPROM_WRITE            41
 
 #define R_PORT 1
 #define R_DDR  2

@@ -453,7 +453,29 @@ void serial::printX(int z, int x)
 	print(x);
 }
 
-void serial::print(int x,int base)
+void serial::print(float x)
+{
+	logprintln(x);
+}
+
+void serial::printX(int z, float x)
+{
+	ino(z);
+	print(x);
+}
+
+void serial::print(double x)
+{
+	logprintln(x);
+}
+
+void serial::printX(int z, double x)
+{
+	ino(z);
+	print(x);
+}
+
+void serial::print(int x, int base)
 {
 	servuinoFunc(S_SERIAL_PRINT_INT_BASE, x, base, NULL, 0);
 }
@@ -491,6 +513,28 @@ void serial::println(int x)
 }
 
 void serial::printlnX(int z, int x)
+{
+	ino(z);
+	println(x);
+}
+
+void serial::println(float x)
+{
+	logprintln(x);
+}
+
+void serial::printlnX(int z, float x)
+{
+	ino(z);
+	println(x);
+}
+
+void serial::println(double x)
+{
+	logprintln(x);
+}
+
+void serial::printlnX(int z, double x)
 {
 	ino(z);
 	println(x);
