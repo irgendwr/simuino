@@ -26,7 +26,7 @@ Clone this repository: `git clone https://github.com/irgendwr/simuino.git`
 
 And enter the folder: `cd simuino`
 
-Now compile the program: `g++ -O3 -lncurses -o simuino simuino.c`
+Now compile the program: `make`
 
 And then run it: `./simuino`
 

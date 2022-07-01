@@ -7,7 +7,7 @@ LIBS = -lncurses -lm
 
 .PHONY: all
 all:
-	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS) -o simuino simuino.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) simuino.c -o simuino $(LIBS)
 	touch temp.txt error.txt servuino/serv.error copy.error
 
 .PHONY: clean
